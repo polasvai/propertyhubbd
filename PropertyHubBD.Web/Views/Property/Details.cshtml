@@ -1,0 +1,88 @@
+@model PropertyHubBD.Web.Models.Property
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Property" asp-action="Division" asp-route-id="@Model.DivisionId">@Model.Division.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Image Carousel -->
+            <div id="propertyCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @if (Model.Images != null && Model.Images.Any())
+                    {
+                        var first = true;
+                        foreach (var img in Model.Images)
+                        {
+                            <div class="carousel-item @(first ? "active" : "")">
+                                <img src="@img.ImageUrl" class="d-block w-100" alt="Property Image">
+                            </div>
+                            first = false;
+                        }
+                    }
+                    else
+                    {
+                        <div class="carousel-item active">
+                            <img src="https://via.placeholder.com/800x400" class="d-block w-100" alt="No Image Available">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <h3>@Model.Title</h3>
+            <h4 class="text-primary">@Model.Price.ToString("C")</h4>
+            <p class="text-muted"><i class="bi bi-geo-alt"></i> @Model.Address, @Model.Upazilla?.Name, @Model.District?.Name</p>
+            
+            <hr />
+            <h5>Description</h5>
+            <p>@Model.Description</p>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <strong>Area:</strong> @Model.AreaSize @Model.AreaUnit
+                </div>
+                <div class="col-md-6">
+                    <strong>Type:</strong> @Model.PropertyType
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Seller Info</h5>
+                    <p class="card-text">@Model.Seller?.FullName</p>
+                    <p class="card-text">@Model.Seller?.Email</p>
+                    <a href="mailto:@Model.Seller?.Email" class="btn btn-outline-primary w-100 mb-2">Contact Seller</a>
+                    <a href="https://wa.me/?text=I'm interested in @Model.Title" target="_blank" class="btn btn-success w-100">WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Share</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-sm btn-primary">Facebook</a>
+                        <a href="#" class="btn btn-sm btn-info">Twitter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

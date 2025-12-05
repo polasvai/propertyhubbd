@@ -1,0 +1,50 @@
+@model PropertyHubBD.Web.Models.Property
+
+@{
+    ViewData["Title"] = "Edit Property";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Edit Property</h2>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label">Price</label>
+                    <input asp-for="Price" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <input asp-for="Address" class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="DivisionId" class="form-label">Division</label>
+                    <select asp-for="DivisionId" class="form-control" asp-items="ViewBag.DivisionId"></select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DistrictId" class="form-label">District</label>
+                    <select asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UpazillaId" class="form-label">Upazilla</label>
+                    <select asp-for="UpazillaId" class="form-control" asp-items="ViewBag.UpazillaId"></select>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

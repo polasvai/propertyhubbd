@@ -1,0 +1,54 @@
+@model List<PropertyHubBD.Web.Models.Property>
+
+@{
+    ViewData["Title"] = "Manage Properties";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Manage Properties</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Seller</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Seller?.FullName ?? item.Seller?.UserName</td>
+                    <td>@item.Division?.Name</td>
+                    <td>
+                        @if (item.IsApproved)
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!item.IsApproved)
+                        {
+                            <form asp-action="ApproveProperty" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                        }
+                        <form asp-action="DeleteProperty" method="post" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
