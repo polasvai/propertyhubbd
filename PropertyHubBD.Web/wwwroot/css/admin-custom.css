@@ -1,0 +1,193 @@
+/* Custom AdminLTE Overrides for PropertyHubBD */
+
+:root {
+    --primary-color: #007bff;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+/* Brand customization */
+.brand-link {
+    background-color: #343a40 !important;
+    border-bottom: 1px solid #4b545c;
+}
+
+.brand-link:hover {
+    background-color: #3f474e !important;
+}
+
+/* Sidebar customization */
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Small box customization */
+.small-box {
+    border-radius: 0.25rem;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+}
+
+.small-box > .inner {
+    padding: 15px;
+}
+
+.small-box h3 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.small-box p {
+    font-size: 1rem;
+}
+
+.small-box .icon {
+    font-size: 70px;
+}
+
+/* Card customization */
+.card {
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+/* DataTable customization */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.25rem 0.5rem;
+    margin-left: 2px;
+}
+
+/* Button customization */
+.btn-tool {
+    background-color: transparent;
+    color: #adb5bd;
+    font-size: 0.875rem;
+    margin: -0.75rem 0;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Info box customization */
+.info-box {
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    border-radius: 0.25rem;
+    background-color: #fff;
+    display: flex;
+    margin-bottom: 1rem;
+    min-height: 80px;
+    padding: 0.5rem;
+    position: relative;
+}
+
+.info-box .info-box-icon {
+    border-radius: 0.25rem;
+    align-items: center;
+    display: flex;
+    font-size: 1.875rem;
+    justify-content: center;
+    text-align: center;
+    width: 70px;
+}
+
+.info-box .info-box-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.8;
+    flex: 1;
+    padding: 0 10px;
+}
+
+.info-box .info-box-number {
+    display: block;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.info-box .info-box-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Badge customization */
+.badge {
+    font-weight: 500;
+}
+
+/* Utility classes */
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .small-box h3 {
+        font-size: 1.5rem;
+    }
+    
+    .small-box .icon {
+        font-size: 50px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .main-sidebar,
+    .main-header,
+    .main-footer {
+        display: none;
+    }
+    
+    .content-wrapper {
+        margin-left: 0 !important;
+    }
+}
+
+/* Loading spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(0,0,0,.1);
+    border-left-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Status badges */
+.status-approved {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-pending {
+    background-color: var(--warning-color);
+    color: #212529;
+}
+
+.status-rejected {
+    background-color: var(--danger-color);
+    color: white;
+}

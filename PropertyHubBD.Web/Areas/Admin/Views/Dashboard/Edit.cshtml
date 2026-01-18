@@ -1,0 +1,246 @@
+@model PropertyHubBD.Web.Models.Property
+
+@{
+    ViewData["Title"] = "Edit Property";
+}
+
+<!-- Display TempData messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-check"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-ban"></i> @TempData["Error"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit mr-2"></i>
+                    Edit Property
+                </h3>
+            </div>
+            <!-- form start -->
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Title -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Title" class="control-label">Property Title <span class="text-danger">*</span></label>
+                                <input asp-for="Title" class="form-control" placeholder="e.g., Modern 3 Bedroom Apartment" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Property Type -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="PropertyType" class="control-label">Property Type <span class="text-danger">*</span></label>
+                                <select asp-for="PropertyType" class="form-control">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Flat">Flat/Apartment</option>
+                                    <option value="Plot">Plot/Land</option>
+                                    <option value="Floor">Floor/Building</option>
+                                    <option value="House">House</option>
+                                    <option value="Commercial">Commercial Space</option>
+                                </select>
+                                <span asp-validation-for="PropertyType" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Status" class="control-label">Status</label>
+                                <select asp-for="Status" class="form-control">
+                                    <option value="Available">Available</option>
+                                    <option value="Sold">Sold</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label">Price (৳) <span class="text-danger">*</span></label>
+                                <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="e.g., 5000000" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Area Size -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="AreaSize" class="control-label">Area Size <span class="text-danger">*</span></label>
+                                <input asp-for="AreaSize" type="number" step="0.01" class="form-control" placeholder="e.g., 1200" />
+                                <span asp-validation-for="AreaSize" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Area Unit -->
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label asp-for="AreaUnit" class="control-label">Unit</label>
+                                <select asp-for="AreaUnit" class="form-control">
+                                    <option value="SqFt">Sq Ft</option>
+                                    <option value="Decimal">Decimal</option>
+                                    <option value="Katha">Katha</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Division -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="DivisionId" class="control-label">Division <span class="text-danger">*</span></label>
+                                <select asp-for="DivisionId" class="form-control" id="divisionSelect">
+                                    <option value="">-- Select Division --</option>
+                                    @foreach (var division in ViewBag.Divisions)
+                                    {
+                                        <option value="@division.Id" selected="@(division.Id == Model.DivisionId)">@division.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="DivisionId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- District -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="DistrictId" class="control-label">District <span class="text-danger">*</span></label>
+                                <select asp-for="DistrictId" class="form-control" id="districtSelect">
+                                    <option value="">-- Select District --</option>
+                                    @foreach (var district in ViewBag.Districts)
+                                    {
+                                        <option value="@district.Id" data-division-id="@district.DivisionId" selected="@(district.Id == Model.DistrictId)">@district.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="DistrictId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Upazilla -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="UpazillaId" class="control-label">Upazilla <span class="text-danger">*</span></label>
+                                <select asp-for="UpazillaId" class="form-control" id="upazillaSelect">
+                                    <option value="">-- Select Upazilla --</option>
+                                    @foreach (var upazilla in ViewBag.Upazillas)
+                                    {
+                                        <option value="@upazilla.Id" data-district-id="@upazilla.DistrictId" selected="@(upazilla.Id == Model.UpazillaId)">@upazilla.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="UpazillaId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label">Full Address</label>
+                                <textarea asp-for="Address" class="form-control" rows="2" placeholder="House/Road/Area details"></textarea>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label">Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Describe the property features, amenities, etc."></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-save"></i> Update Property
+                    </button>
+                    <a asp-action="Properties" class="btn btn-default">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            var initialDivisionId = '@Model.DivisionId';
+            var initialDistrictId = '@Model.DistrictId';
+            
+            // Initialize cascading dropdowns
+            if (initialDivisionId) {
+                filterDistricts(initialDivisionId);
+            }
+            if (initialDistrictId) {
+                filterUpazillas(initialDistrictId);
+            }
+
+            // Cascading dropdowns for Division -> District -> Upazilla
+            $('#divisionSelect').change(function() {
+                var divisionId = $(this).val();
+                filterDistricts(divisionId);
+                $('#districtSelect').val('');
+                $('#upazillaSelect').val('').prop('disabled', true);
+            });
+
+            $('#districtSelect').change(function() {
+                var districtId = $(this).val();
+                filterUpazillas(districtId);
+                $('#upazillaSelect').val('');
+            });
+
+            function filterDistricts(divisionId) {
+                var $districtSelect = $('#districtSelect');
+                $districtSelect.find('option').each(function() {
+                    var $option = $(this);
+                    if ($option.val() === '') {
+                        $option.show();
+                    } else if ($option.data('division-id') == divisionId) {
+                        $option.show();
+                    } else {
+                        $option.hide();
+                    }
+                });
+                $districtSelect.prop('disabled', !divisionId);
+            }
+
+            function filterUpazillas(districtId) {
+                var $upazillaSelect = $('#upazillaSelect');
+                $upazillaSelect.find('option').each(function() {
+                    var $option = $(this);
+                    if ($option.val() === '') {
+                        $option.show();
+                    } else if ($option.data('district-id') == districtId) {
+                        $option.show();
+                    } else {
+                        $option.hide();
+                    }
+                });
+                $upazillaSelect.prop('disabled', !districtId);
+            }
+        });
+    </script>
+}

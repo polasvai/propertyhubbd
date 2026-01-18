@@ -8,7 +8,7 @@ namespace PropertyHubBD.Web.Data
         public static async Task SeedAdminUser(UserManager<ApplicationUser> userManager, ILogger logger)
         {
             var adminEmail = "superadmin@propertyhubbd.com";
-            var adminPassword = "Admin@123";
+            var adminPassword = "@Admin123";
 
             try
             {
@@ -46,23 +46,39 @@ namespace PropertyHubBD.Web.Data
                 }
                 else
                 {
-                    logger.LogInformation("Admin user already exists. Updating to ensure Admin role...");
+                    logger.LogInformation("Admin user already exists. Updating to ensure Admin role and resetting password...");
                     
                     // Update existing user to Admin
                     existingAdmin.UserType = "Admin";
                     existingAdmin.FullName = "Super Admin";
                     existingAdmin.EmailConfirmed = true;
                     
-                    var result = await userManager.UpdateAsync(existingAdmin);
+                    var updateResult = await userManager.UpdateAsync(existingAdmin);
                     
-                    if (result.Succeeded)
+                    if (updateResult.Succeeded)
                     {
                         logger.LogInformation("✅ User updated to Admin: {Email}", adminEmail);
                         Console.WriteLine($"✅ User updated to Admin: {adminEmail}");
+                        
+                        // Reset password
+                        var token = await userManager.GeneratePasswordResetTokenAsync(existingAdmin);
+                        var passwordResult = await userManager.ResetPasswordAsync(existingAdmin, token, adminPassword);
+                        
+                        if (passwordResult.Succeeded)
+                        {
+                            logger.LogInformation("✅ Password reset successfully for: {Email}", adminEmail);
+                            Console.WriteLine($"✅ Password reset successfully for: {adminEmail}");
+                        }
+                        else
+                        {
+                            var errors = string.Join(", ", passwordResult.Errors.Select(e => e.Description));
+                            logger.LogError("❌ Failed to reset password: {Errors}", errors);
+                            Console.WriteLine($"❌ Failed to reset password: {errors}");
+                        }
                     }
                     else
                     {
-                        var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                        var errors = string.Join(", ", updateResult.Errors.Select(e => e.Description));
                         logger.LogError("❌ Failed to update user: {Errors}", errors);
                         Console.WriteLine($"❌ Failed to update user: {errors}");
                     }

@@ -2,30 +2,190 @@
 
 @{
     ViewData["Title"] = "Manage Users";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <h2>Manage Users</h2>
-    <table class="table table-striped mt-3">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>User Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.UserName</td>
-                    <td>@item.Email</td>
-                    <td>@item.FullName</td>
-                    <td>@item.UserType</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<!-- Display TempData messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-check"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-ban"></i> @TempData["Error"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users mr-2"></i>
+                    All Users
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="usersTable" class="table table-bordered table-striped data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Full Name</th>
+                            <th>User Type</th>
+                            <th>Email Confirmed</th>
+                            <th>Phone Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <small class="text-muted">@item.Id.Substring(0, 8)...</small>
+                                </td>
+                                <td>
+                                    <i class="fas fa-user-circle mr-1"></i>
+                                    <strong>@item.UserName</strong>
+                                </td>
+                                <td>
+                                    <i class="fas fa-envelope mr-1"></i>
+                                    @item.Email
+                                </td>
+                                <td>@(item.FullName ?? "N/A")</td>
+                                <td>
+                                    @if (item.UserType == "Admin")
+                                    {
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-user-shield"></i> Admin
+                                        </span>
+                                    }
+                                    else if (item.UserType == "Seller")
+                                    {
+                                        <span class="badge badge-primary">
+                                            <i class="fas fa-store"></i> Seller
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-user"></i> @item.UserType
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (item.EmailConfirmed)
+                                    {
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle"></i> Yes
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-times-circle"></i> No
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.PhoneNumber))
+                                    {
+                                        <i class="fas fa-phone mr-1"></i>
+                                        <span>@item.PhoneNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Full Name</th>
+                            <th>User Type</th>
+                            <th>Email Confirmed</th>
+                            <th>Phone Number</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
 </div>
+
+<!-- User Statistics Cards -->
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-info"><i class="fas fa-users"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Total Users</span>
+                <span class="info-box-number">@Model.Count</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-danger"><i class="fas fa-user-shield"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Admins</span>
+                <span class="info-box-number">@Model.Count(u => u.UserType == "Admin")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fas fa-store"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Sellers</span>
+                <span class="info-box-number">@Model.Count(u => u.UserType == "Seller")</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="fas fa-check-circle"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Verified</span>
+                <span class="info-box-number">@Model.Count(u => u.EmailConfirmed)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "pageLength": 25,
+                "order": [[1, "asc"]]
+            });
+        });
+    </script>
+}

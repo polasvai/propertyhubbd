@@ -116,6 +116,17 @@ namespace PropertyHubBD.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    
+                    // Get the user to check their role
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    
+                    // Redirect based on user type
+                    if (user != null && (user.UserType == "Admin" || user.UserType == "Seller"))
+                    {
+                        _logger.LogInformation($"Redirecting {user.UserType} user to Admin Dashboard");
+                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                    }
+                    
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

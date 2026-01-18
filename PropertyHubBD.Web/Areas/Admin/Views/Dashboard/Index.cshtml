@@ -1,51 +1,242 @@
 @model PropertyHubBD.Web.Models.AdminDashboardViewModel
 
 @{
-    ViewData["Title"] = "Admin Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container mt-4">
-    <h2>Admin Dashboard</h2>
-    
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <p class="card-text display-4">@Model.TotalUsers</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Properties</h5>
-                    <p class="card-text display-4">@Model.TotalProperties</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-dark mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Pending Approval</h5>
-                    <p class="card-text display-4">@Model.PendingProperties</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Divisions</h5>
-                    <p class="card-text display-4">@Model.TotalDivisions</p>
-                </div>
-            </div>
-        </div>
+<!-- Display TempData messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-check"></i> @TempData["Success"]
     </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon fas fa-ban"></i> @TempData["Error"]
+    </div>
+}
 
-    <div class="mt-4">
-        <h4>Quick Actions</h4>
-        <a asp-action="Properties" class="btn btn-outline-primary">Manage Properties</a>
-        <a asp-action="Users" class="btn btn-outline-secondary">Manage Users</a>
+<!-- Info boxes -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3 class="counter">@Model.TotalUsers</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <a asp-action="Users" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
     </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3 class="counter">@Model.TotalProperties</h3>
+                <p>Total Properties</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <a asp-action="Properties" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3 class="counter">@Model.PendingProperties</h3>
+                <p>Pending Approval</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <a asp-action="Properties" class="small-box-footer">
+                More info <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3 class="counter">@Model.TotalDivisions</h3>
+                <p>Divisions</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                View All <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
 </div>
+<!-- /.row -->
+
+<!-- Main row -->
+<div class="row">
+    <!-- Left col -->
+    <section class="col-lg-7 connectedSortable">
+        <!-- Recent Properties -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-building mr-1"></i>
+                    Recent Properties
+                </h3>
+                <div class="card-tools">
+                    <a asp-action="Properties" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i> View All
+                    </a>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Seller</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentProperties.Any())
+                            {
+                                @foreach (var property in Model.RecentProperties)
+                                {
+                                    <tr>
+                                        <td>@property.Title</td>
+                                        <td>@(property.Seller?.FullName ?? property.Seller?.UserName ?? "N/A")</td>
+                                        <td>@(property.Division?.Name ?? "N/A")</td>
+                                        <td>
+                                            @if (property.IsApproved)
+                                            {
+                                                <span class="badge badge-success">Approved</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">Pending</span>
+                                            }
+                                        </td>
+                                        <td>@property.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No properties found</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </section>
+    <!-- /.Left col -->
+
+    <!-- Right col -->
+    <section class="col-lg-5 connectedSortable">
+        <!-- Recent Users -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users mr-1"></i>
+                    Recent Users
+                </h3>
+                <div class="card-tools">
+                    <a asp-action="Users" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i> View All
+                    </a>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <ul class="users-list clearfix">
+                    @if (Model.RecentUsers.Any())
+                    {
+                        @foreach (var user in Model.RecentUsers)
+                        {
+                            <li style="width: 100%; border-bottom: 1px solid #f4f4f4; padding: 10px;">
+                                <i class="fas fa-user-circle fa-2x" style="float: left; margin-right: 10px;"></i>
+                                <div>
+                                    <strong>@(user.FullName ?? user.UserName)</strong><br />
+                                    <small class="text-muted">@user.Email</small><br />
+                                    <span class="badge badge-@(user.UserType == "Admin" ? "danger" : user.UserType == "Seller" ? "primary" : "secondary")">
+                                        @user.UserType
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="text-center text-muted p-3">No users found</li>
+                    }
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bolt mr-1"></i>
+                    Quick Actions
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <a asp-action="Create" class="btn btn-app bg-success w-100">
+                            <i class="fas fa-plus-circle"></i> Add Property
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-action="Properties" class="btn btn-app bg-primary w-100">
+                            <i class="fas fa-building"></i> Manage Properties
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-action="Users" class="btn btn-app bg-info w-100">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-app bg-secondary w-100">
+                            <i class="fas fa-globe"></i> View Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+    <!-- /.Right col -->
+</div>
+<!-- /.row -->
