@@ -30,7 +30,7 @@
                 </h3>
             </div>
             <!-- form start -->
-            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id" />
                 
@@ -154,6 +154,36 @@
                                 <label asp-for="Address" class="control-label">Full Address</label>
                                 <textarea asp-for="Address" class="form-control" rows="2" placeholder="House/Road/Area details"></textarea>
                                 <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Existing Images -->
+                        @if(Model.Images != null && Model.Images.Any())
+                        {
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Current Images</label>
+                                    <div class="d-flex flex-wrap">
+                                        @foreach(var img in Model.Images)
+                                        {
+                                            <div class="m-1 border rounded p-1">
+                                                <img src="@img.ImageUrl" class="img-fluid" style="height: 100px; width: 150px; object-fit: cover;" alt="Property Image" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- New Images -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="photos" class="control-label">Add New Images</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="photos" name="photos" multiple accept="image/*">
+                                    <label class="custom-file-label" for="photos">Choose images to add</label>
+                                </div>
+                                <small class="form-text text-muted">Selected images will be added to the existing ones.</small>
                             </div>
                         </div>
 

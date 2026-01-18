@@ -17,9 +17,16 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? divisionId, string search)
     {
-        var divisions = await _context.Divisions
+        var viewModel = new HomeViewModel
+        {
+            SelectedDivisionId = divisionId,
+            SearchTerm = search
+        };
+
+        // Fetch Divisions
+        viewModel.Divisions = await _context.Divisions
             .Select(d => new DivisionViewModel
             {
                 Id = d.Id,
@@ -29,7 +36,34 @@ public class HomeController : Controller
             })
             .ToListAsync();
 
-        return View(divisions);
+        // Build Property Query
+        var propertyQuery = _context.Properties
+            .Include(p => p.Division)
+            .Include(p => p.District)
+            .Include(p => p.Upazilla)
+            .Include(p => p.Images)
+            .Where(p => p.Status == "Available" && p.IsApproved);
+
+        if (divisionId.HasValue)
+        {
+            propertyQuery = propertyQuery.Where(p => p.DivisionId == divisionId.Value);
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            propertyQuery = propertyQuery.Where(p => 
+                p.Title.Contains(search) || 
+                p.Description.Contains(search) || 
+                p.Address.Contains(search));
+        }
+
+        // Fetch Recent/Filtered Properties
+        viewModel.Properties = await propertyQuery
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(9)
+            .ToListAsync();
+
+        return View(viewModel);
     }
 
     public IActionResult Privacy()

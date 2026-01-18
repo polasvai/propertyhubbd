@@ -31,10 +31,18 @@ using (var scope = app.Services.CreateScope())
         logger.LogInformation("Initializing database...");
         DbInitializer.Initialize(context);
         
+        logger.LogInformation("Initializing locations...");
+        LocationSeeder.SeedLocations(context);
+        
         // Seed admin user
         logger.LogInformation("Seeding admin user...");
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         await AdminSeeder.SeedAdminUser(userManager, logger);
+        
+        // Seed properties
+        logger.LogInformation("Seeding demo properties...");
+        await PropertySeeder.SeedProperties(context, userManager);
+        
         logger.LogInformation("Database initialization complete.");
     }
     catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿@model List<PropertyHubBD.Web.Models.DivisionViewModel>
+﻿@model PropertyHubBD.Web.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -9,72 +9,97 @@
 </div>
 
 <div class="container">
-    <div class="row">
+    <!-- Search Bar -->
+    <div class="row mb-5">
         <div class="col-md-8 offset-md-2">
-            <h3 class="text-center mb-4">Select a Division</h3>
-            <div class="map-container position-relative text-center">
-                <!-- Simplified SVG Map of Bangladesh (Placeholder Paths) -->
-                <svg viewBox="0 0 500 600" style="width: 100%; height: auto; max-width: 500px; background-color: #f8f9fa; border: 1px solid #ddd;">
-                    <!-- Rangpur -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Rangpur")?.Id">
-                        <path d="M150,50 L250,50 L250,150 L150,150 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Rangpur")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Rangpur" />
-                        <text x="200" y="100" text-anchor="middle" fill="#000" font-size="12">Rangpur (@(Model.FirstOrDefault(d => d.Name == "Rangpur")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Mymensingh -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Mymensingh")?.Id">
-                        <path d="M250,100 L350,100 L350,180 L250,180 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Mymensingh")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Mymensingh" />
-                        <text x="300" y="140" text-anchor="middle" fill="#000" font-size="12">Mymensingh (@(Model.FirstOrDefault(d => d.Name == "Mymensingh")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Sylhet -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Sylhet")?.Id">
-                        <path d="M350,120 L450,120 L450,200 L350,200 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Sylhet")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Sylhet" />
-                        <text x="400" y="160" text-anchor="middle" fill="#000" font-size="12">Sylhet (@(Model.FirstOrDefault(d => d.Name == "Sylhet")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Rajshahi -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Rajshahi")?.Id">
-                        <path d="M50,150 L150,150 L150,250 L50,250 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Rajshahi")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Rajshahi" />
-                        <text x="100" y="200" text-anchor="middle" fill="#000" font-size="12">Rajshahi (@(Model.FirstOrDefault(d => d.Name == "Rajshahi")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Dhaka -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Dhaka")?.Id">
-                        <path d="M180,200 L300,200 L300,320 L180,320 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Dhaka")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Dhaka" />
-                        <text x="240" y="260" text-anchor="middle" fill="#000" font-size="12">Dhaka (@(Model.FirstOrDefault(d => d.Name == "Dhaka")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Khulna -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Khulna")?.Id">
-                        <path d="M80,300 L180,300 L180,450 L80,450 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Khulna")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Khulna" />
-                        <text x="130" y="375" text-anchor="middle" fill="#000" font-size="12">Khulna (@(Model.FirstOrDefault(d => d.Name == "Khulna")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Barisal -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Barisal")?.Id">
-                        <path d="M180,350 L280,350 L280,450 L180,450 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Barisal")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Barisal" />
-                        <text x="230" y="400" text-anchor="middle" fill="#000" font-size="12">Barisal (@(Model.FirstOrDefault(d => d.Name == "Barisal")?.PropertyCount ?? 0))</text>
-                    </a>
-
-                    <!-- Chittagong -->
-                    <a asp-controller="Property" asp-action="Division" asp-route-id="@Model.FirstOrDefault(d => d.Name == "Chittagong")?.Id">
-                        <path d="M300,300 L450,300 L450,500 L300,500 Z" fill="@(Model.FirstOrDefault(d => d.Name == "Chittagong")?.Color ?? "#ccc")" stroke="#fff" stroke-width="2" class="division-path" data-name="Chittagong" />
-                        <text x="375" y="400" text-anchor="middle" fill="#000" font-size="12">Chittagong (@(Model.FirstOrDefault(d => d.Name == "Chittagong")?.PropertyCount ?? 0))</text>
-                    </a>
-                </svg>
-                <div class="mt-3">
-                    <small class="text-muted">Click on a division to see available properties.</small>
+            <form asp-action="Index" method="get">
+                <div class="input-group input-group-lg">
+                    <input type="text" name="search" class="form-control" placeholder="Search by property title, location..." value="@Model.SearchTerm">
+                    <if condition="Model.SelectedDivisionId.HasValue">
+                        <input type="hidden" name="divisionId" value="@Model.SelectedDivisionId" />
+                    </if>
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Division Buttons -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h3 class="mb-4">Browse by Division</h3>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a asp-action="Index" class="btn btn-outline-secondary @(!Model.SelectedDivisionId.HasValue ? "active" : "")">All</a>
+                @foreach (var division in Model.Divisions)
+                {
+                    <a asp-action="Index" asp-route-divisionId="@division.Id" 
+                       class="btn btn-outline-primary @(Model.SelectedDivisionId == division.Id ? "active" : "")"
+                       style="border-color: @(division.Color ?? "#007bff"); color: @(Model.SelectedDivisionId == division.Id ? "#fff" : (division.Color ?? "#007bff")); background-color: @(Model.SelectedDivisionId == division.Id ? (division.Color ?? "#007bff") : "transparent");">
+                        @division.Name
+                    </a>
+                }
             </div>
         </div>
+    </div>
+
+    <!-- Property List -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">
+                @(Model.SelectedDivisionId.HasValue 
+                    ? $"Properties in {Model.Divisions.FirstOrDefault(d => d.Id == Model.SelectedDivisionId)?.Name}" 
+                    : "Recently Added Properties")
+            </h3>
+        </div>
+        
+        @if (!Model.Properties.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-info">
+                    No properties found matching your criteria.
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var property in Model.Properties)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Property Image -->
+                        <div style="height: 200px; overflow: hidden; background-color: #f8f9fa;" class="d-flex align-items-center justify-content-center">
+                            @if (property.Images != null && property.Images.Any())
+                            {
+                                <img src="@property.Images.First().ImageUrl" class="card-img-top" alt="@property.Title" style="object-fit: cover; height: 100%; width: 100%;">
+                            }
+                            else
+                            {
+                                <div class="text-muted"><i class="fas fa-home fa-3x"></i></div>
+                            }
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate" title="@property.Title">@property.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-primary fw-bold">৳ @property.Price.ToString("N0")</h6>
+                            <p class="card-text small text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-1"></i> 
+                                @property.Upazilla?.Name, @property.District?.Name
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span><i class="fas fa-ruler-combined me-1"></i> @property.AreaSize @property.AreaUnit</span>
+                                <span class="badge bg-secondary">@property.PropertyType</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
     </div>
 </div>
 
 <style>
-    .division-path:hover {
-        opacity: 0.8;
-        cursor: pointer;
-        stroke: #333;
-    }
+    .gap-2 { gap: 0.5rem; }
 </style>

@@ -381,4 +381,4 @@ J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\ref\PropertyHubBD.W
 J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\PropertyHubBD.Web.sourcelink.json
 J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\compressed\72nxcry06h-75j395p3so.gz
 J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\compressed\i6352r3ix1-07iedzv4fo.gz
-J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\compressed\r0rv4qc06b-yedoddfxuw.gz

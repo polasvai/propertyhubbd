@@ -14,11 +14,13 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public DashboardController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public DashboardController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         private async Task SetCurrentUserInViewBag()
@@ -126,11 +128,64 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
             return View();
         }
 
+        // EDIT PROPERTY - GET
+        [HttpGet]
+        [CanEditPropertyAuthorize]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var property = await _context.Properties
+                .Include(p => p.Division)
+                .Include(p => p.District)
+                .Include(p => p.Upazilla)
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
+                
+            if (property == null)
+            {
+                TempData["Error"] = "Property not found!";
+                return RedirectToAction(nameof(Properties));
+            }
+            
+            await SetCurrentUserInViewBag();
+            await LoadLocationData();
+            return View(property);
+        }
+
+        private async Task<List<PropertyImage>> ProcessUploadedImages(List<IFormFile> photos)
+        {
+             var images = new List<PropertyImage>();
+             if (photos != null && photos.Count > 0)
+             {
+                 string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "properties");
+                 if (!Directory.Exists(uploadFolder))
+                 {
+                     Directory.CreateDirectory(uploadFolder);
+                 }
+
+                 foreach (var photo in photos)
+                 {
+                     if (photo.Length > 0)
+                     {
+                         string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(photo.FileName);
+                         string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                         
+                         using (var fileStream = new FileStream(filePath, FileMode.Create))
+                         {
+                             await photo.CopyToAsync(fileStream);
+                         }
+
+                         images.Add(new PropertyImage { ImageUrl = "/uploads/properties/" + uniqueFileName });
+                     }
+                 }
+             }
+             return images;
+        }
+
         // CREATE PROPERTY - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CanAddPropertyAuthorize]
-        public async Task<IActionResult> Create(Property property)
+        public async Task<IActionResult> Create(Property property, List<IFormFile> photos)
         {
             if (ModelState.IsValid)
             {
@@ -150,6 +205,13 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
                     property.IsApproved = false;
                 }
                 
+                // Handle Images
+                var uploadedImages = await ProcessUploadedImages(photos);
+                if (uploadedImages.Any())
+                {
+                    property.Images = uploadedImages;
+                }
+
                 _context.Properties.Add(property);
                 await _context.SaveChangesAsync();
                 
@@ -162,33 +224,11 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
             return View(property);
         }
 
-        // EDIT PROPERTY - GET
-        [HttpGet]
-        [CanEditPropertyAuthorize]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var property = await _context.Properties
-                .Include(p => p.Division)
-                .Include(p => p.District)
-                .Include(p => p.Upazilla)
-                .FirstOrDefaultAsync(p => p.Id == id);
-                
-            if (property == null)
-            {
-                TempData["Error"] = "Property not found!";
-                return RedirectToAction(nameof(Properties));
-            }
-            
-            await SetCurrentUserInViewBag();
-            await LoadLocationData();
-            return View(property);
-        }
-
         // EDIT PROPERTY - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         [CanEditPropertyAuthorize]
-        public async Task<IActionResult> Edit(int id, Property property)
+        public async Task<IActionResult> Edit(int id, Property property, List<IFormFile> photos)
         {
             if (id != property.Id)
             {
@@ -200,7 +240,10 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
             {
                 try
                 {
-                    var existingProperty = await _context.Properties.FindAsync(id);
+                    var existingProperty = await _context.Properties
+                        .Include(p => p.Images)
+                        .FirstOrDefaultAsync(p => p.Id == id);
+
                     if (existingProperty == null)
                     {
                         TempData["Error"] = "Property not found!";
@@ -220,6 +263,20 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
                     existingProperty.DistrictId = property.DistrictId;
                     existingProperty.UpazillaId = property.UpazillaId;
                     
+                    // Handle New Images
+                    var uploadedImages = await ProcessUploadedImages(photos);
+                    if (uploadedImages.Any())
+                    {
+                        if (existingProperty.Images == null) 
+                            existingProperty.Images = new List<PropertyImage>();
+                            
+                        // Append new images
+                        foreach(var img in uploadedImages)
+                        {
+                            existingProperty.Images.Add(img);
+                        }
+                    }
+
                     _context.Update(existingProperty);
                     await _context.SaveChangesAsync();
                     

@@ -30,7 +30,7 @@
                 </h3>
             </div>
             <!-- form start -->
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div class="card-body">
                     <div class="row">
@@ -152,6 +152,18 @@
                                 <label asp-for="Address" class="control-label">Full Address</label>
                                 <textarea asp-for="Address" class="form-control" rows="2" placeholder="House/Road/Area details"></textarea>
                                 <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Images -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="photos" class="control-label">Property Images</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="photos" name="photos" multiple accept="image/*">
+                                    <label class="custom-file-label" for="photos">Choose images</label>
+                                </div>
+                                <small class="form-text text-muted">You can select multiple images.</small>
                             </div>
                         </div>
 

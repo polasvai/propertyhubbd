@@ -19,6 +19,13 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+@using Microsoft.AspNetCore.Identity
+@using PropertyHubBD.Web.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!-- ... existing code ... -->
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -26,6 +33,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var user = await UserManager.GetUserAsync(User);
+                            if (user != null)
+                            {
+                                <li class="nav-item">
+                                    @if (user.UserType == "Admin")
+                                    {
+                                        <a class="nav-link text-dark fw-bold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a>
+                                    }
+                                    else if (user.UserType == "Seller")
+                                    {
+                                        <a class="nav-link text-dark fw-bold" asp-area="Seller" asp-controller="Dashboard" asp-action="Index">Seller Dashboard</a>
+                                    }
+                                    else
+                                    {
+                                         <a class="nav-link text-dark fw-bold" asp-area="User" asp-controller="Dashboard" asp-action="Index">My Dashboard</a>
+                                    }
+                                </li>
+                            }
+                        }
                     </ul>
                     <form class="d-flex mx-auto" asp-controller="Property" asp-action="Search" method="get">
                         <input class="form-control me-2" type="search" placeholder="Search Property" aria-label="Search" name="q">
