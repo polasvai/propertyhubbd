@@ -22,22 +22,22 @@ namespace PropertyHubBD.Web.Models
         
         // Location Foreign Keys
         public int DivisionId { get; set; }
-        public Division Division { get; set; }
+        public Division? Division { get; set; }
         
         public int DistrictId { get; set; }
-        public District District { get; set; }
+        public District? District { get; set; }
         
         public int UpazillaId { get; set; }
-        public Upazilla Upazilla { get; set; }
+        public Upazilla? Upazilla { get; set; }
 
         // Seller
         public string SellerId { get; set; }
-        public ApplicationUser Seller { get; set; }
+        public ApplicationUser? Seller { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsApproved { get; set; }
 
-        public ICollection<PropertyImage> Images { get; set; }
+        public ICollection<PropertyImage>? Images { get; set; }
     }
 
     public class PropertyImage

@@ -1,0 +1,50 @@
+@model PropertyHubBD.Web.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card card-warning">
+    <div class="card-header">
+        <h3 class="card-title">Edit User</h3>
+    </div>
+    <form asp-action="EditUser" method="post">
+        <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FullName">Full Name</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserType">User Type</label>
+                <select asp-for="UserType" class="form-control">
+                    <option value="User">User</option>
+                    <option value="Seller">Seller</option>
+                    <option value="Admin">Admin</option>
+                </select>
+                <span asp-validation-for="UserType" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-warning">Update User</button>
+            <a asp-action="Users" class="btn btn-default">Cancel</a>
+        </div>
+    </form>
+</div>

@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = Model.Title;
+    var currentUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}";
+    var encodedUrl = System.Net.WebUtility.UrlEncode(currentUrl);
+    var encodedTitle = System.Net.WebUtility.UrlEncode(Model.Title);
 }
 
 <div class="container mt-4">
@@ -70,7 +73,12 @@
                     <p class="card-text">@Model.Seller?.FullName</p>
                     <p class="card-text">@Model.Seller?.Email</p>
                     <a href="mailto:@Model.Seller?.Email" class="btn btn-outline-primary w-100 mb-2">Contact Seller</a>
-                    <a href="https://wa.me/?text=I'm interested in @Model.Title" target="_blank" class="btn btn-success w-100">WhatsApp</a>
+                    <button class="btn btn-outline-danger w-100 mb-2" onclick="toggleSave(@Model.Id)" id="saveBtn">
+                        <i class="far fa-heart"></i> Save for Later
+                    </button>
+                    <a href="https://wa.me/?text=@System.Net.WebUtility.UrlEncode("I'm interested in " + Model.Title + " at " + currentUrl)" target="_blank" class="btn btn-success w-100">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Seller
+                    </a>
                 </div>
             </div>
 
@@ -78,11 +86,55 @@
                 <div class="card-body">
                     <h5 class="card-title">Share</h5>
                     <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-primary">Facebook</a>
-                        <a href="#" class="btn btn-sm btn-info">Twitter</a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=@encodedUrl" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=@encodedUrl&text=@encodedTitle" target="_blank" class="btn btn-sm btn-info text-white">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="https://wa.me/?text=@encodedTitle%20@encodedUrl" target="_blank" class="btn btn-sm btn-success">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function toggleSave(propertyId) {
+            fetch('/Property/ToggleSave', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify(propertyId)
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/Identity/Account/Login';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                const btn = document.getElementById('saveBtn');
+                if (data.saved) {
+                    btn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                    btn.classList.remove('btn-outline-danger');
+                    btn.classList.add('btn-danger');
+                } else {
+                    btn.innerHTML = '<i class="far fa-heart"></i> Save for Later';
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-outline-danger');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
+        // Optional: Check initial status if we had that info
+    </script>
+}

@@ -68,6 +68,11 @@ namespace PropertyHubBD.Web.Areas.Seller.Controllers
 
             if (string.IsNullOrEmpty(property.Title)) ModelState.AddModelError("Title", "Title is required");
 
+            // Remove SellerId/Seller from validation since valid values are set in controller
+            ModelState.Remove("SellerId");
+            ModelState.Remove("Seller");
+            ModelState.Remove("Images");
+
             if (ModelState.IsValid)
             {
                 _context.Add(property);
@@ -134,6 +139,12 @@ namespace PropertyHubBD.Web.Areas.Seller.Controllers
             property.SellerId = existing.SellerId;
             property.CreatedAt = existing.CreatedAt;
             property.IsApproved = false;
+
+            property.IsApproved = false;
+
+            // Remove SellerId/Seller from validation
+            ModelState.Remove("SellerId");
+            ModelState.Remove("Seller");
 
             if (ModelState.IsValid)
             {

@@ -8,7 +8,7 @@
 <div class="container mt-4">
     <h2>Add New Property</h2>
     <form asp-action="Create" method="post" enctype="multipart/form-data">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
         @Html.AntiForgeryToken()
         <div class="row">
             <div class="col-md-6">
@@ -68,13 +68,13 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="DistrictId" class="form-label">District</label>
-                    <select asp-for="DistrictId" class="form-control" asp-items="@((SelectList)ViewData["DistrictId"])">
+                    <select asp-for="DistrictId" class="form-control">
                         <option value="">-- Select District --</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="UpazillaId" class="form-label">Upazilla</label>
-                    <select asp-for="UpazillaId" class="form-control" asp-items="@((SelectList)ViewData["UpazillaId"])">
+                    <select asp-for="UpazillaId" class="form-control">
                         <option value="">-- Select Upazilla --</option>
                     </select>
                 </div>
@@ -91,4 +91,47 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            var districtSelect = $('#DistrictId');
+            var upazillaSelect = $('#UpazillaId');
+            
+            // Clear dropdowns initially
+            function resetDistrict() {
+                districtSelect.empty().append('<option value="">-- Select District --</option>');
+                resetUpazilla();
+            }
+            
+            function resetUpazilla() {
+                upazillaSelect.empty().append('<option value="">-- Select Upazilla --</option>');
+            }
+
+            $('#DivisionId').change(function() {
+                var divisionId = $(this).val();
+                resetDistrict();
+                
+                if (divisionId) {
+                    $.getJSON('/api/Locations/GetDistricts/' + divisionId, function(data) {
+                        $.each(data, function(i, item) {
+                            districtSelect.append($('<option></option>').val(item.id).html(item.name));
+                        });
+                    });
+                }
+            });
+            
+            $('#DistrictId').change(function() {
+                var districtId = $(this).val();
+                resetUpazilla();
+                
+                if (districtId) {
+                    $.getJSON('/api/Locations/GetUpazillas/' + districtId, function(data) {
+                        $.each(data, function(i, item) {
+                            upazillaSelect.append($('<option></option>').val(item.id).html(item.name));
+                        });
+                    });
+                }
+            });
+        });
+    </script>
 }

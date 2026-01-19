@@ -7,7 +7,13 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <a class="nav-link text-dark d-flex align-items-center" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            @{
+                var user = await UserManager.GetUserAsync(User);
+                var profilePic = user?.ProfilePictureUrl ?? "/images/default-avatar.png";
+            }
+            <img src="@profilePic" alt="Profile" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" title="Hello @User.Identity?.Name!">
+        </a>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

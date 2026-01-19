@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(695,71): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(698,73): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(701,8): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+
+Build FAILED.
+
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(695,71): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(698,73): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+J:\Projects\propertyhubbd\PropertyHubBD.Web\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Manage_Index_cshtml.g.cs(701,8): error CS0246: The type or namespace name 'IndexModel' could not be found (are you missing a using directive or an assembly reference?) [J:\Projects\propertyhubbd\PropertyHubBD.Web\PropertyHubBD.Web.csproj]
+    0 Warning(s)
+    3 Error(s)
+
+Time Elapsed 00:00:01.48

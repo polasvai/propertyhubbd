@@ -8,6 +8,7 @@
 <div class="container mt-4">
     <h2>Edit Property</h2>
     <form asp-action="Edit">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="row">
             <div class="col-md-6">
@@ -36,11 +37,15 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="DistrictId" class="form-label">District</label>
-                    <select asp-for="DistrictId" class="form-control" asp-items="ViewBag.DistrictId"></select>
+                    <select asp-for="DistrictId" class="form-control" data-selected="@Model.DistrictId">
+                        <option value="">-- Select District --</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="UpazillaId" class="form-label">Upazilla</label>
-                    <select asp-for="UpazillaId" class="form-control" asp-items="ViewBag.UpazillaId"></select>
+                    <select asp-for="UpazillaId" class="form-control" data-selected="@Model.UpazillaId">
+                        <option value="">-- Select Upazilla --</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -48,3 +53,72 @@
         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function() {
+            var districtSelect = $('#DistrictId');
+            var upazillaSelect = $('#UpazillaId');
+            var selectedDistrict = districtSelect.data('selected');
+            var selectedUpazilla = upazillaSelect.data('selected');
+
+            // Clear dropdowns initially
+            function resetDistrict() {
+                districtSelect.empty().append('<option value="">-- Select District --</option>');
+                resetUpazilla();
+            }
+            
+            function resetUpazilla() {
+                upazillaSelect.empty().append('<option value="">-- Select Upazilla --</option>');
+            }
+
+            function loadDistricts(divisionId, selectedId) {
+                resetDistrict();
+                if (divisionId) {
+                    $.getJSON('/api/Locations/GetDistricts/' + divisionId, function(data) {
+                        $.each(data, function(i, item) {
+                            var option = $('<option></option>').val(item.id).html(item.name);
+                            if(item.id == selectedId) option.prop('selected', true);
+                            districtSelect.append(option);
+                        });
+                        // After loading districts, if there was a selected district, load upazillas
+                        if(selectedId) {
+                            loadUpazillas(selectedId, selectedUpazilla);
+                        }
+                    });
+                }
+            }
+
+            function loadUpazillas(districtId, selectedId) {
+                resetUpazilla();
+                if (districtId) {
+                    $.getJSON('/api/Locations/GetUpazillas/' + districtId, function(data) {
+                        $.each(data, function(i, item) {
+                            var option = $('<option></option>').val(item.id).html(item.name);
+                             if(item.id == selectedId) option.prop('selected', true);
+                            upazillaSelect.append(option);
+                        });
+                    });
+                }
+            }
+
+            $('#DivisionId').change(function() {
+                var divisionId = $(this).val();
+                loadDistricts(divisionId, null);
+            });
+            
+            $('#DistrictId').change(function() {
+                var districtId = $(this).val();
+                loadUpazillas(districtId, null);
+            });
+
+            // Initial Load for Edit
+            var initialDivisionId = $('#DivisionId').val();
+            if(initialDivisionId) {
+                loadDistricts(initialDivisionId, selectedDistrict);
+            }
+        });
+    </script>
+}

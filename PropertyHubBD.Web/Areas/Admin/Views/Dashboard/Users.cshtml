@@ -40,12 +40,14 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Full Name</th>
                             <th>User Type</th>
                             <th>Email Confirmed</th>
                             <th>Phone Number</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,6 +56,9 @@
                             <tr>
                                 <td>
                                     <small class="text-muted">@item.Id.Substring(0, 8)...</small>
+                                </td>
+                                <td>
+                                    <img src="@(item.ProfilePictureUrl ?? "/images/default-avatar.png")" alt="User" class="img-circle" style="width: 32px; height: 32px; object-fit: cover;">
                                 </td>
                                 <td>
                                     <i class="fas fa-user-circle mr-1"></i>
@@ -109,12 +114,25 @@
                                         <span class="text-muted">N/A</span>
                                     }
                                 </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="EditUser" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="DeleteUser" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
                     <tfoot>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Full Name</th>
@@ -180,11 +198,12 @@
     <script>
         $(document).ready(function() {
             $('#usersTable').DataTable({
+                "destroy": true,
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": false,
                 "pageLength": 25,
-                "order": [[1, "asc"]]
+                "order": [[2, "asc"]]
             });
         });
     </script>

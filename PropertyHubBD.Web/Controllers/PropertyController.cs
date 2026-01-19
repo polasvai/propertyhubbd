@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PropertyHubBD.Web.Data;
 using PropertyHubBD.Web.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace PropertyHubBD.Web.Controllers
 {
@@ -9,9 +10,37 @@ namespace PropertyHubBD.Web.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public PropertyController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public PropertyController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleSave([FromBody] int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var saved = await _context.SavedProperties
+                .FirstOrDefaultAsync(sp => sp.UserId == user.Id && sp.PropertyId == id);
+
+            bool isSaved = false;
+            if (saved != null)
+            {
+                _context.SavedProperties.Remove(saved);
+                isSaved = false;
+            }
+            else
+            {
+                _context.SavedProperties.Add(new SavedProperty { UserId = user.Id, PropertyId = id });
+                isSaved = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(new { saved = isSaved });
         }
 
         public async Task<IActionResult> Division(int id)

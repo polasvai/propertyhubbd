@@ -111,11 +111,74 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Users()
         {
             await SetCurrentUserInViewBag();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser.UserType != "Admin") return Forbid();
             
             var users = await _userManager.Users
                 .OrderByDescending(u => u.Id)
                 .ToListAsync();
             return View(users);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SuperAdminAuthorize] // Optional: keep it restrictive or allow regular Admins? 
+        // User asked "admin can delete", so maybe just AdminAuthorize (implied by class).
+        // But deleting users is dangerous. Let's keep it class level AdminAuthorize.
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+             var user = await _userManager.FindByIdAsync(id);
+             if (user != null)
+             {
+                 await _userManager.DeleteAsync(user);
+                 TempData["Success"] = "User deleted successfully!";
+             }
+             else
+             {
+                 TempData["Error"] = "User not found!";
+             }
+             return RedirectToAction(nameof(Users));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            await SetCurrentUserInViewBag();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                TempData["Error"] = "User not found!";
+                return RedirectToAction(nameof(Users));
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(string id, ApplicationUser updatedUser)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            user.FullName = updatedUser.FullName;
+            user.PhoneNumber = updatedUser.PhoneNumber;
+            user.UserType = updatedUser.UserType;
+            // Optionally update other fields
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "User updated successfully!";
+                return RedirectToAction(nameof(Users));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            await SetCurrentUserInViewBag();
+            return View(user);
         }
 
         // CREATE PROPERTY - GET
@@ -187,6 +250,10 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
         [CanAddPropertyAuthorize]
         public async Task<IActionResult> Create(Property property, List<IFormFile> photos)
         {
+            // Remove SellerId/Seller from validation since valid values are set in controller
+            ModelState.Remove("SellerId");
+            ModelState.Remove("Seller");
+
             if (ModelState.IsValid)
             {
                 var currentUser = await _userManager.GetUserAsync(User);
@@ -238,6 +305,10 @@ namespace PropertyHubBD.Web.Areas.Admin.Controllers
             
             if (ModelState.IsValid)
             {
+                // Remove SellerId/Seller from validation
+                ModelState.Remove("SellerId");
+                ModelState.Remove("Seller");
+
                 try
                 {
                     var existingProperty = await _context.Properties

@@ -15,53 +15,88 @@ namespace PropertyHubBD.Web.Data
             if (!divisions.Any()) return;
 
             // Define Data Mapping: Division -> District -> Upazillas
-            var locationData = new Dictionary<string, Dictionary<string, string[]>>()
+            var locationData = new Dictionary<string, Dictionary<string, string[]>>
             {
                 { "Dhaka", new Dictionary<string, string[]> {
-                    { "Dhaka", new[] { "Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Dohar", "Dhaka Sadar" } },
-                    { "Gazipur", new[] { "Gazipur Sadar", "Kaliakair", "Kaliganj", "Kapasia", "Sreepur" } },
-                    { "Narayanganj", new[] { "Narayanganj Sadar", "Bandar", "Rupganj", "Sonargaon", "Araihazar" } },
-                    { "Tangail", new[] { "Tangail Sadar", "Sakhipur", "Basail", "Madhupur", "Ghatail", "Kalihati", "Nagarpur", "Mirzapur", "Gopalpur", "Delduar", "Bhuapur", "Dhanbari" } },
-                    { "Narsingdi", new[] { "Narsingdi Sadar", "Belabo", "Monohardi", "Palash", "Raipura", "Shibpur" } },
-                    { "Faridpur", new[] { "Faridpur Sadar", "Boalmari", "Alfadanga", "Madhukhali", "Bhanga", "Nagarkanda", "Charbhadrasan", "Sadarpur", "Saltha" } }
-                }},
-                { "Chittagong", new Dictionary<string, string[]> {
-                     { "Chittagong", new[] { "Chittagong Sadar", "Sitakunda", "Mirsharai", "Patiya", "Karnaphuli", "Lohagara", "Satkania", "Boalkhali", "Chandanaish", "Raozan", "Rangunia", "Fatikchhari", "Hathazari", "Anwara", "Banshkhali", "Sandwip" } },
-                     { "Cox's Bazar", new[] { "Cox's Bazar Sadar", "Chakaria", "Kutubdia", "Ukhiya", "Moheshkhali", "Pekua", "Ramu", "Teknaf" } },
-                     { "Comilla", new[] { "Comilla Sadar", "Barura", "Brahmanpara", "Burichang", "Chandina", "Chauddagram", "Daudkandi", "Debidwar", "Homna", "Laksam", "Muradnagar", "Nangalkot", "Meghna", "Titas", "Monohargonj", "Sadar South" } },
-                     { "Feni", new[] { "Feni Sadar", "Chhagalnaiya", "Daganbhuiyan", "Parshuram", "Fulgazi", "Sonagazi" } },
-                     { "Noakhali", new[] { "Noakhali Sadar", "Begumganj", "Chatkhil", "Companyganj", "Hatiya", "Senbagh", "Subarnachar", "Kabirhat", "Sonaimuri" } }
-                }},
-                { "Sylhet", new Dictionary<string, string[]> {
-                     { "Sylhet", new[] { "Sylhet Sadar", "Beanibazar", "Bishwanath", "Dakshin Surma", "Balaganj", "Companiganj", "Fenchuganj", "Golapganj", "Gowainghat", "Jaintiapur", "Kanaighat", "Zakiganj", "Osmani Nagar" } },
-                     { "Moulvibazar", new[] { "Moulvibazar Sadar", "Barlekha", "Juri", "Kamalganj", "Kulaura", "Rajnagar", "Sreemangal" } },
-                     { "Habiganj", new[] { "Habiganj Sadar", "Azmiriganj", "Bahubal", "Baniyachong", "Chunarughat", "Lakhai", "Madhabpur", "Nabiganj", "Sayestaganj" } },
-                     { "Sunamganj", new[] { "Sunamganj Sadar", "Bishwamvarpur", "Chhatak", "Derai", "Dharamapasha", "Dowarabazar", "Jagannathpur", "Jamalganj", "Sullah", "Tahirpur", "South Sunamganj", "Shantiganj" } }
-                }},
-                { "Rajshahi", new Dictionary<string, string[]> {
-                     { "Rajshahi", new[] { "Rajshahi Sadar", "Bagha", "Bagmara", "Charghat", "Durgapur", "Godagari", "Mohanpur", "Paba", "Puthia", "Tanore" } },
-                     { "Bogra", new[] { "Bogra Sadar", "Adamdighi", "Dhunat", "Dhupchanchia", "Gabtali", "Kahaloo", "Nandigram", "Sariakandi", "Sahajanpur", "Sherpur", "Shibganj", "Sonatala" } },
-                      { "Pabna", new[] { "Pabna Sadar", "Atgharia", "Bera", "Bhangura", "Chatmohar", "Faridpur", "Ishwardi", "Santhia", "Sujanagar" } },
-                      { "Sirajganj", new[] { "Sirajganj Sadar", "Belkuchi", "Chauhali", "Kamarkhanda", "Kazipur", "Raiganj", "Shahjadpur", "Tarash", "Ullapara" } }
-                }},
-                { "Khulna", new Dictionary<string, string[]> {
-                     { "Khulna", new[] { "Khulna Sadar", "Batiaghata", "Dacope", "Dumuria", "Dighalia", "Koyra", "Paikgachha", "Phultala", "Rupsha", "Terokhada" } },
-                     { "Jessore", new[] { "Jessore Sadar", "Abhaynagar", "Bagherpara", "Chaugachha", "Jhikargachha", "Keshabpur", "Manirampur", "Sharsha" } },
-                     { "Satkhira", new[] { "Satkhira Sadar", "Assasuni", "Debhata", "Kalaroa", "Kaliganj", "Shyamnagar", "Tala" } }
+                    { "Manikganj", new[] { "Harirampur", "Saturia", "Manikganj Sadar", "Gior", "Shibaloy", "Doulatpur", "Singiar" } },
+                    { "Munshiganj", new[] { "Munshiganj Sadar", "Sreenagar", "Sirajdikhan", "Louhajanj", "Gajaria", "Tongibari" } },
+                    { "Narsingdi", new[] { "Belabo", "Monohardi", "Narsingdi Sadar", "Palash", "Raipura", "Shibpur" } },
+                    { "Gazipur", new[] { "Kaliganj", "Kaliakair", "Kapasia", "Gazipur Sadar", "Sreepur" } },
+                    { "Faridpur", new[] { "Faridpur Sadar", "Alfadanga", "Boalmari", "Sadarpur", "Nagarkanda", "Bhanga", "Charbhadrasan", "Madhukhali", "Saltha" } },
+                    { "Shariatpur", new[] { "Shariatpur Sadar", "Naria", "Zajira", "Gosairhat", "Bhedarganj", "Damudya" } },
+                    { "Kishoreganj", new[] { "Itna", "Katiadi", "Bhairab", "Tarail", "Hossainpur", "Pakundia", "Kuliarchar", "Kishoreganj Sadar", "Karimgonj", "Bajitpur", "Austagram", "Mithamoin", "Nikli" } },
+                    { "Narayanganj", new[] { "Araihazar", "Bandar", "Narayanganj Sadar", "Rupganj", "Sonargaon" } },
+                    { "Rajbari", new[] { "Rajbari Sadar", "Goalanda", "Pangsa", "Baliakandi", "Kalukhali" } },
+                    { "Dhaka", new[] { "Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Dohar" } },
+                    { "Tangail", new[] { "Basail", "Bhuapur", "Delduar", "Ghatail", "Gopalpur", "Madhupur", "Mirzapur", "Nagarpur", "Sakhipur", "Tangail Sadar", "Kalihati", "Dhanbari" } },
+                    { "Gopalganj", new[] { "Gopalganj Sadar", "Kashiani", "Tungipara", "Kotalipara", "Muksudpur" } },
+                    { "Madaripur", new[] { "Madaripur Sadar", "Shibchar", "Kalkini", "Rajoir", "Dasar" } },
                 }},
                 { "Barisal", new Dictionary<string, string[]> {
-                     { "Barisal", new[] { "Barisal Sadar", "Agailjhara", "Babuganj", "Bakerganj", "Banaripara", "Gaurnadi", "Hizla", "Mehendiganj", "Muladi", "Wazirpur" } },
-                     { "Patuakhali", new[] { "Patuakhali Sadar", "Bauphal", "Dashmina", "Galachipa", "Kalapara", "Mirzaganj", "Rangabali", "Dumki" } },
-                     { "Bhola", new[] { "Bhola Sadar", "Burhanuddin", "Char Fasson", "Daulatkhan", "Lalmohan", "Manpura", "Tazumuddin" } }
+                    { "Jhalakathi", new[] { "Jhalakathi Sadar", "Kathalia", "Nalchity", "Rajapur" } },
+                    { "Barguna", new[] { "Amtali", "Barguna Sadar", "Betagi", "Bamna", "Pathorghata", "Taltali" } },
+                    { "Pirojpur", new[] { "Pirojpur Sadar", "Nazirpur", "Kawkhali", "Zianagar", "Bhandaria", "Mathbaria", "Nesarabad" } },
+                    { "Patuakhali", new[] { "Bauphal", "Patuakhali Sadar", "Dumki", "Dashmina", "Kalapara", "Mirzaganj", "Galachipa", "Rangabali" } },
+                    { "Bhola", new[] { "Bhola Sadar", "Borhan Sddin", "Charfesson", "Doulatkhan", "Monpura", "Tazumuddin", "Lalmohan" } },
+                    { "Barisal", new[] { "Barisal Sadar", "Bakerganj", "Babuganj", "Wazirpur", "Banaripara", "Gournadi", "Agailjhara", "Mehendiganj", "Muladi", "Hizla" } },
                 }},
-                 { "Rangpur", new Dictionary<string, string[]> {
-                     { "Rangpur", new[] { "Rangpur Sadar", "Badarganj", "Gangachara", "Kaunia", "Mithapukur", "Pirgachha", "Pirganj", "Taraganj" } },
-                     { "Dinajpur", new[] { "Dinajpur Sadar", "Birampur", "Birganj", "Bochaganj", "Chirirbandar", "Fulbari", "Ghoraghat", "Hakimpur", "Kaharole", "Khansama", "Nawabganj", "Parbatipur" } }
+                { "Khulna", new Dictionary<string, string[]> {
+                    { "Narail", new[] { "Narail Sadar", "Lohagara", "Kalia" } },
+                    { "Khulna", new[] { "Paikgasa", "Fultola", "Digholia", "Rupsha", "Terokhada", "Dumuria", "Botiaghata", "Dakop", "Koyra" } },
+                    { "Meherpur", new[] { "Mujibnagar", "Meherpur Sadar", "Gangni" } },
+                    { "Jashore", new[] { "Manirampur", "Abhaynagar", "Bagherpara", "Chougachha", "Jhikargacha", "Keshabpur", "Jessore Sadar", "Sharsha" } },
+                    { "Bagerhat", new[] { "Fakirhat", "Bagerhat Sadar", "Mollahat", "Sarankhola", "Rampal", "Morrelganj", "Kachua", "Mongla", "Chitalmari" } },
+                    { "Jhenaidah", new[] { "Jhenaidah Sadar", "Shailkupa", "Harinakundu", "Kaliganj", "Kotchandpur", "Moheshpur" } },
+                    { "Kushtia", new[] { "Kushtia Sadar", "Kumarkhali", "Khoksa", "Mirpur", "Daulatpur", "Bheramara" } },
+                    { "Satkhira", new[] { "Assasuni", "Debhata", "Kalaroa", "Satkhira Sadar", "Shyamnagar", "Tala", "Kaliganj" } },
+                    { "Magura", new[] { "Shalikha", "Sreepur", "Magura Sadar", "Mohammadpur" } },
+                    { "Chuadanga", new[] { "Chuadanga Sadar", "Alamdanga", "Damurhuda", "Jibannagar" } },
                 }},
-                 { "Mymensingh", new Dictionary<string, string[]> {
-                     { "Mymensingh", new[] { "Mymensingh Sadar", "Bhaluka", "Dhobaura", "Fulbaria", "Gafargaon", "Gauripur", "Haluaghat", "Ishwarganj", "Muktagachha", "Nandail", "Phulpur", "Trishal", "Tara Khanda" } },
-                     { "Jamalpur", new[] { "Jamalpur Sadar", "Baksiganj", "Dewanganj", "Islampur", "Madarganj", "Melandaha", "Sarishabari" } }
-                }}
+                { "Chattagram", new Dictionary<string, string[]> {
+                    { "Bandarban", new[] { "Bandarban Sadar", "Alikadam", "Naikhongchhari", "Rowangchhari", "Lama", "Ruma", "Thanchi" } },
+                    { "Khagrachhari", new[] { "Khagrachhari Sadar", "Dighinala", "Panchari", "Laxmichhari", "Mohalchari", "Manikchari", "Ramgarh", "Matiranga", "Guimara" } },
+                    { "Chandpur", new[] { "Haimchar", "Kachua", "Shahrasti", "Chandpur Sadar", "Matlab South", "Hajiganj", "Matlab North", "Faridgonj" } },
+                    { "Rangamati", new[] { "Rangamati Sadar", "Kaptai", "Kawkhali", "Baghaichari", "Barkal", "Langadu", "Rajasthali", "Belaichari", "Juraichari", "Naniarchar" } },
+                    { "Brahmanbaria", new[] { "Brahmanbaria Sadar", "Kasba", "Nasirnagar", "Sarail", "Ashuganj", "Akhaura", "Nabinagar", "Bancharampur", "Bijoynagar" } },
+                    { "Coxsbazar", new[] { "Coxsbazar Sadar", "Chakaria", "Kutubdia", "Ukhiya", "Moheshkhali", "Pekua", "Ramu", "Teknaf", "Eidgaon" } },
+                    { "Comilla", new[] { "Debidwar", "Barura", "Brahmanpara", "Chandina", "Chauddagram", "Daudkandi", "Homna", "Laksam", "Muradnagar", "Nangalkot", "Comilla Sadar", "Meghna", "Monohargonj", "Sadarsouth", "Titas", "Burichang", "Lalmai" } },
+                    { "Noakhali", new[] { "Noakhali Sadar", "Companiganj", "Begumganj", "Hatia", "Subarnachar", "Kabirhat", "Senbug", "Chatkhil", "Sonaimori" } },
+                    { "Lakshmipur", new[] { "Lakshmipur Sadar", "Kamalnagar", "Raipur", "Ramgati", "Ramganj" } },
+                    { "Chattogram", new[] { "Rangunia", "Sitakunda", "Mirsharai", "Patiya", "Sandwip", "Banshkhali", "Boalkhali", "Anwara", "Chandanaish", "Satkania", "Lohagara", "Hathazari", "Fatikchhari", "Raozan", "Karnafuli" } },
+                    { "Feni", new[] { "Chhagalnaiya", "Feni Sadar", "Sonagazi", "Fulgazi", "Parshuram", "Daganbhuiyan" } },
+                }},
+                { "Sylhet", new Dictionary<string, string[]> {
+                    { "Moulvibazar", new[] { "Barlekha", "Kamolganj", "Kulaura", "Moulvibazar Sadar", "Rajnagar", "Sreemangal", "Juri" } },
+                    { "Sunamganj", new[] { "Sunamganj Sadar", "South Sunamganj", "Bishwambarpur", "Chhatak", "Jagannathpur", "Dowarabazar", "Tahirpur", "Dharmapasha", "Jamalganj", "Shalla", "Derai", "Madhyanagar" } },
+                    { "Sylhet", new[] { "Balaganj", "Beanibazar", "Bishwanath", "Companiganj", "Fenchuganj", "Golapganj", "Gowainghat", "Jaintiapur", "Kanaighat", "Sylhet Sadar", "Zakiganj", "Dakshinsurma", "Osmaninagar" } },
+                    { "Habiganj", new[] { "Nabiganj", "Bahubal", "Ajmiriganj", "Baniachong", "Lakhai", "Chunarughat", "Habiganj Sadar", "Madhabpur" } },
+                }},
+                { "Rangpur", new Dictionary<string, string[]> {
+                    { "Nilphamari", new[] { "Syedpur", "Domar", "Dimla", "Jaldhaka", "Kishorganj", "Nilphamari Sadar" } },
+                    { "Rangpur", new[] { "Rangpur Sadar", "Gangachara", "Taragonj", "Badargonj", "Mithapukur", "Pirgonj", "Kaunia", "Pirgacha" } },
+                    { "Dinajpur", new[] { "Nawabganj", "Birganj", "Ghoraghat", "Birampur", "Parbatipur", "Bochaganj", "Kaharol", "Fulbari", "Dinajpur Sadar", "Hakimpur", "Khansama", "Birol", "Chirirbandar" } },
+                    { "Lalmonirhat", new[] { "Lalmonirhat Sadar", "Kaliganj", "Hatibandha", "Patgram", "Aditmari" } },
+                    { "Gaibandha", new[] { "Sadullapur", "Gaibandha Sadar", "Palashbari", "Saghata", "Gobindaganj", "Sundarganj", "Phulchari" } },
+                    { "Panchagarh", new[] { "Panchagarh Sadar", "Debiganj", "Boda", "Atwari", "Tetulia" } },
+                    { "Kurigram", new[] { "Kurigram Sadar", "Nageshwari", "Bhurungamari", "Phulbari", "Rajarhat", "Ulipur", "Chilmari", "Rowmari", "Charrajibpur" } },
+                    { "Thakurgaon", new[] { "Thakurgaon Sadar", "Pirganj", "Ranisankail", "Haripur", "Baliadangi" } },
+                }},
+                { "Mymensingh", new Dictionary<string, string[]> {
+                    { "Sherpur", new[] { "Sherpur Sadar", "Nalitabari", "Sreebordi", "Nokla", "Jhenaigati" } },
+                    { "Jamalpur", new[] { "Jamalpur Sadar", "Melandah", "Islampur", "Dewangonj", "Sarishabari", "Madarganj", "Bokshiganj" } },
+                    { "Netrokona", new[] { "Barhatta", "Durgapur", "Kendua", "Atpara", "Madan", "Khaliajuri", "Kalmakanda", "Mohongonj", "Purbadhala", "Netrokona Sadar" } },
+                    { "Mymensingh", new[] { "Fulbaria", "Trishal", "Bhaluka", "Muktagacha", "Mymensingh Sadar", "Dhobaura", "Phulpur", "Haluaghat", "Gouripur", "Gafargaon", "Iswarganj", "Nandail", "Tarakanda" } },
+                }},
+                { "Rajshahi", new Dictionary<string, string[]> {
+                    { "Naogaon", new[] { "Mohadevpur", "Badalgachi", "Patnitala", "Dhamoirhat", "Niamatpur", "Manda", "Atrai", "Raninagar", "Naogaon Sadar", "Porsha", "Sapahar" } },
+                    { "Rajshahi", new[] { "Paba", "Durgapur", "Mohonpur", "Charghat", "Puthia", "Bagha", "Godagari", "Tanore", "Bagmara" } },
+                    { "Natore", new[] { "Natore Sadar", "Singra", "Baraigram", "Bagatipara", "Lalpur", "Gurudaspur", "Naldanga" } },
+                    { "Pabna", new[] { "Sujanagar", "Ishurdi", "Bhangura", "Pabna Sadar", "Bera", "Atghoria", "Chatmohar", "Santhia", "Faridpur" } },
+                    { "Chapainawabganj", new[] { "Chapainawabganj Sadar", "Gomostapur", "Nachol", "Bholahat", "Shibganj" } },
+                    { "Bogura", new[] { "Kahaloo", "Bogra Sadar", "Shariakandi", "Shajahanpur", "Dupchanchia", "Adamdighi", "Nondigram", "Sonatala", "Dhunot", "Gabtali", "Sherpur", "Shibganj" } },
+                    { "Sirajganj", new[] { "Belkuchi", "Chauhali", "Kamarkhand", "Kazipur", "Raigonj", "Shahjadpur", "Sirajganj Sadar", "Tarash", "Ullapara" } },
+                    { "Joypurhat", new[] { "Akkelpur", "Kalai", "Khetlal", "Panchbibi", "Joypurhat Sadar" } },
+                }},
             };
 
             foreach (var divData in locationData)
